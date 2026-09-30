@@ -36,7 +36,7 @@
 
   const params = new URLSearchParams(location.search);
   const showDrafts = params.has("drafts");
-  let lang = params.get("lang") || store.get("lang") || ((navigator.language || "de").startsWith("de") ? "de" : "en");
+  let lang = params.get("lang") || store.get("lang") || "de"; // Standard: Deutsch. Englisch per ?lang=en
   if (!UI[lang]) lang = "de";
 
   const t = (v) => (v == null ? "" : typeof v === "object" && !Array.isArray(v) ? (v[lang] && (!Array.isArray(v[lang]) || v[lang].length) ? v[lang] : v.de ?? "") : v);
@@ -242,10 +242,10 @@
   });
 
   /* ---------- 3D / Klassisch ---------- */
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // 3D startet immer (ausser ohne WebGL). Besucher können oben rechts auf "Klassisch" wechseln.
   const webgl = (() => { try { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch (e) { return false; } })();
   const saved = store.get("mode");
-  state.classic = params.get("mode") === "classic" || (params.get("mode") !== "3d" && (saved === "classic" || (!saved && reduced))) || !webgl;
+  state.classic = params.get("mode") === "classic" || (params.get("mode") !== "3d" && saved === "classic") || !webgl;
   if (!webgl) $("mode-toggle").hidden = true;
 
   function applyMode() {

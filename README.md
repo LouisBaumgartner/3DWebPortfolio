@@ -31,11 +31,11 @@ assets/             deine Bilder, CV, Foto
 
 | Parameter | Wirkung |
 |---|---|
-| `?lang=en` | englische Version (z. B. für Bewerbungen auf Englisch) |
+| `?lang=en` | englische Version (Standard ist Deutsch), z. B. für Bewerbungen auf Englisch |
 | `?mode=classic` | Version ohne 3D |
 | `?drafts=1` | zeigt Case-Study-Entwürfe |
 
-Besucher können oben rechts auch selbst Sprache und 3D/Klassisch umschalten. Ohne WebGL oder bei "Bewegung reduzieren" startet automatisch die klassische Ansicht.
+Besucher können oben rechts auch selbst Sprache und 3D/Klassisch umschalten. Ohne WebGL startet automatisch die klassische Ansicht.
 
 ## Lokal ansehen
 

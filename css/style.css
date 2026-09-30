@@ -14,13 +14,8 @@
   --mono: "JetBrains Mono", ui-monospace, monospace;
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0f1114; --surface: rgba(24, 27, 32, 0.8); --surface-solid: #181b20;
-    --text: #eceae4; --muted: #9ba0a8; --line: rgba(236, 234, 228, 0.12);
-    --accent: #ff5a43; color-scheme: dark;
-  }
-}
+/* Die Seite ist bewusst immer hell (passend zum weissen Architekturmodell).
+   Dunkle Variante nur, wenn du <html data-theme="dark"> setzt. */
 :root[data-theme="dark"] {
   --bg: #0f1114; --surface: rgba(24, 27, 32, 0.8); --surface-solid: #181b20;
   --text: #eceae4; --muted: #9ba0a8; --line: rgba(236, 234, 228, 0.12);

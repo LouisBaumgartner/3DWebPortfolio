@@ -49,12 +49,12 @@ python3 -m http.server 8000
 
 ## Auf GitHub Pages veröffentlichen
 
-1. Auf github.com ein **neues, öffentliches** Repository anlegen, z. B. `portfolio`
-   (oder `LouisBaumgartner.github.io` für die kürzeste Adresse).
+1. Repository: `LouisBaumgartner/3DWebPortfolio`. Für kostenloses GitHub Pages muss es **öffentlich** sein
+   (Settings → General → Danger Zone → Change visibility), sonst braucht es GitHub Pro.
 2. Alle Dateien dieses Ordners hochladen (Web: "Add file → Upload files", oder per git push).
-3. Im Repository: **Settings → Pages → Branch: `main` / Ordner: `/ (root)` → Save**.
+3. Im Repository: **Settings → Pages → Branch: `master` / Ordner: `/ (root)` → Save**.
 4. Nach 1–2 Minuten ist die Seite online unter
-   `https://louisbaumgartner.github.io/portfolio/`.
+   `https://louisbaumgartner.github.io/3DWebPortfolio/`.
 
 ## 3D-Szene anpassen (js/scene.js)
 

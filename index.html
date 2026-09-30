@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Louis Baumgartner – Portfolio</title>
+  <meta name="description" content="Digital Solutions | Client Requirements & Delivery. Portfolio von Louis Baumgartner." />
+  <meta property="og:title" content="Louis Baumgartner – Portfolio" />
+  <meta property="og:description" content="Kundenbedürfnisse in tragfähige digitale Lösungen übersetzen." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <script type="importmap">
+    { "imports": { "three": "./js/vendor/three.module.min.js" } }
+  </script>
+</head>
+<body>
+  <canvas id="scene" aria-hidden="true"></canvas>
+
+  <header class="topbar">
+    <a href="#top" class="brand" data-bind="meta.name"></a>
+    <nav class="nav" aria-label="Hauptnavigation">
+      <a href="#experience" data-i18n="nav.experience"></a>
+      <a href="#projects" data-i18n="nav.projects"></a>
+      <a href="#skills" data-i18n="nav.skills"></a>
+      <a href="#contact" data-i18n="nav.contact"></a>
+    </nav>
+    <div class="controls">
+      <button id="lang-toggle" class="chip" type="button" aria-label="Sprache wechseln">EN</button>
+      <button id="mode-toggle" class="chip" type="button" aria-pressed="false"></button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <p class="eyebrow mono" data-bind="meta.headline"></p>
+      <h1><span data-bind="meta.firstName"></span><br /><span data-bind="meta.lastName"></span></h1>
+      <p class="lead" data-bind="meta.intro"></p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#projects" data-i18n="hero.cta"></a>
+        <a class="btn" id="cv-link" href="#" target="_blank" rel="noopener" data-i18n="hero.cv"></a>
+      </div>
+      <p class="scroll-hint mono" data-i18n="hero.scroll"></p>
+    </section>
+
+    <section class="strengths" id="strengths" aria-labelledby="strengths-h">
+      <h2 id="strengths-h" class="section-title" data-i18n="sec.strengths"></h2>
+      <div class="grid-4" id="strengths-list"></div>
+    </section>
+
+    <section id="experience" aria-labelledby="exp-h">
+      <h2 id="exp-h" class="section-title" data-i18n="sec.experience"></h2>
+      <!-- 3D-Modus: Scroll-Bühne, die Kamera fährt durch die Stationen -->
+      <div class="scrolly" id="scrolly">
+        <div class="stage">
+          <article class="station-panel card" id="station-panel" aria-live="polite"></article>
+          <ol class="station-dots" id="station-dots" aria-hidden="true"></ol>
+        </div>
+      </div>
+      <!-- Klassischer Modus: normale Liste -->
+      <ol class="timeline" id="experience-list"></ol>
+    </section>
+
+    <section id="projects" aria-labelledby="proj-h">
+      <h2 id="proj-h" class="section-title" data-i18n="sec.projects"></h2>
+      <div class="project-grid" id="project-list"></div>
+    </section>
+
+    <section id="skills" aria-labelledby="skills-h">
+      <h2 id="skills-h" class="section-title" data-i18n="sec.skills"></h2>
+      <div class="skills" id="skills-list"></div>
+      <div class="two-col">
+        <div>
+          <h3 class="sub-title" data-i18n="sec.education"></h3>
+          <ul class="plain-list" id="education-list"></ul>
+        </div>
+        <div>
+          <h3 class="sub-title" data-i18n="sec.volunteering"></h3>
+          <ul class="plain-list" id="volunteering-list"></ul>
+          <h3 class="sub-title" data-i18n="sec.languages"></h3>
+          <ul class="plain-list" id="language-list"></ul>
+        </div>
+      </div>
+      <blockquote class="feedback" id="feedback"></blockquote>
+    </section>
+
+    <section id="contact" class="contact" aria-labelledby="contact-h">
+      <h2 id="contact-h" class="section-title" data-i18n="sec.contact"></h2>
+      <div class="about">
+        <div class="portrait" id="portrait"></div>
+        <div>
+          <p class="about-text" data-bind="meta.about"></p>
+          <p class="lead" data-bind="meta.availability"></p>
+          <div class="contact-links" id="contact-links"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer mono">
+    <span>© <span id="year"></span> Louis Baumgartner</span>
+    <span data-i18n="footer.built"></span>
+  </footer>
+
+  <dialog id="project-dialog" aria-labelledby="dlg-title">
+    <button class="dlg-close" type="button" aria-label="Schliessen">×</button>
+    <div id="dlg-body"></div>
+  </dialog>
+
+  <script src="js/content.js"></script>
+  <script src="js/app.js"></script>
+  <script type="module" src="js/scene.js"></script>
+</body>
+</html>

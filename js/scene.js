@@ -404,10 +404,11 @@ const stations = C.experience.map((e, i) => {
 
 /* ---------- Kamera-Keyframes ----------
    off = Verschiebung des Bildausschnitts (Anteil der Breite/Höhe):
-   ox > 0 schiebt die Szene nach rechts (Platz für Text links). */
+   ox > 0 schiebt die Szene nach rechts (Platz für Text links),
+   oyM > 0 schiebt sie auf Mobile nach unten (unter den Hero-Text), < 0 nach oben. */
 const center = new THREE.Vector3(0, 0, -((N - 1) * SPACING) / 2);
 const K = [];
-K.push({ pos: new THREE.Vector3(30, 26, 22), look: center.clone().add(new THREE.Vector3(0, 0, 4)), ox: 0.2, oxM: 0, oyM: -0.18, dist: 40 });
+K.push({ pos: new THREE.Vector3(30, 26, 22), look: center.clone().add(new THREE.Vector3(0, 0, 4)), ox: 0.2, oxM: 0, oyM: 0.3, dist: 40 });
 stations.forEach((s) => {
   const p = s.position;
   K.push({ pos: new THREE.Vector3(p.x + 9.5, p.y + 7.2, p.z + 12.5), look: new THREE.Vector3(p.x, p.y + 1.3, p.z), ox: 0.17, oxM: 0, oyM: 0.2, dist: 14 });
@@ -436,19 +437,53 @@ let tNow = 0, offX = 0, offY = 0;
 const clock = new THREE.Clock();
 let running = false;
 
+/* Mobile: freier Bereich zwischen Kopfzeile und Infokachel.
+   Die Kamera richtet das Diorama genau in diesem Bereich ein. */
+const topbar = document.querySelector(".topbar");
+const panel = document.getElementById("station-panel");
+const DIORAMA_RADIUS = 6.0; // halbe Diagonale eines Sockels (+ etwas Luft)
+function freeRegion() {
+  const top = topbar ? topbar.getBoundingClientRect().bottom : 0;
+  let bottom = H;
+  if (panel && !panel.classList.contains("hidden")) {
+    const r = panel.getBoundingClientRect();
+    if (r.height > 0 && r.top < H) bottom = Math.max(top + 120, r.top - 8);
+  }
+  return { top, bottom };
+}
+
 function sample(t) {
   const i = Math.max(0, Math.min(K.length - 2, Math.floor(t)));
   const f = THREE.MathUtils.clamp(t - i, 0, 1);
   const a = K[i], b = K[i + 1];
   pos.lerpVectors(a.pos, b.pos, f);
-  // Bei Stationswechsel etwas anheben -> Flug-Gefühl
-  pos.y += Math.sin(f * Math.PI) * (i > 0 && i < K.length - 2 ? 3 : 0);
   look.lerpVectors(a.look, b.look, f);
   const mobile = W < 900;
+  let oy = mobile ? THREE.MathUtils.lerp(a.oyM, b.oyM, f) : 0;
+
+  // Hochformat im Stationsbereich: Diorama in den freien Bereich einpassen
+  const inStations = t > 0.5 && t < N + 0.5;
+  if (mobile && inStations) {
+    const reg = freeRegion();
+    const regH = reg.bottom - reg.top;
+    const centerY = (reg.top + reg.bottom) / 2;
+    oy = (centerY - H / 2) / H; // Mitte des freien Bereichs (negativ = Szene rückt nach oben)
+    const tanHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+    const fitV = tanHalf * (regH / H);
+    const fitH = tanHalf * (W / H);
+    const need = DIORAMA_RADIUS / Math.min(fitV, fitH);
+    const dir = pos.clone().sub(look);
+    const len = dir.length();
+    // sanft einblenden, damit der Übergang vom Hero nicht springt
+    const w = THREE.MathUtils.smoothstep(t, 0.5, 1);
+    pos.copy(look).add(dir.setLength(THREE.MathUtils.lerp(len, Math.max(len, need), w)));
+  }
+  // Bei Stationswechsel etwas anheben -> Flug-Gefühl
+  pos.y += Math.sin(f * Math.PI) * (i > 0 && i < K.length - 2 ? 3 : 0);
   return {
     ox: mobile ? THREE.MathUtils.lerp(a.oxM, b.oxM, f) : THREE.MathUtils.lerp(a.ox, b.ox, f),
-    oy: mobile ? THREE.MathUtils.lerp(a.oyM, b.oyM, f) : 0,
-    dist: THREE.MathUtils.lerp(a.dist, b.dist, f),
+    oy,
+    dist: THREE.MathUtils.lerp(a.dist, b.dist, f) * (mobile && inStations ? 1.6 : 1),
   };
 }
 
